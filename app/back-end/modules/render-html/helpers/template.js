@@ -103,13 +103,18 @@ class TemplateHelper {
         let filePath = path.join(this.outputDir, postSlug + suffix);
         content = this.compressHTML(content);
 
-        if(this.siteConfig.advanced.urls.cleanUrls) {
-            let dirPath = path.join(this.outputDir, postSlug);
-
-            if(!Utils.dirExists(dirPath)) {
-                fs.mkdirSync(dirPath);
-            }
+        let dirPath = path.dirname(filePath)
+        if(!Utils.dirExists(dirPath)) {
+            Utils.mkdirByPathSync(dirPath);
         }
+
+        // if(this.siteConfig.advanced.urls.cleanUrls) {
+        //     let dirPath = path.join(this.outputDir, postSlug);
+
+        //     if(!Utils.dirExists(dirPath)) {
+        //         Utils.mkdirByPathSync(dirPath);
+        //     }
+        // }
 
         fs.writeFile(filePath, content, {'flags': 'w'});
     }
@@ -128,11 +133,11 @@ class TemplateHelper {
         } catch(e) {}
 
         if(!pageDirStat) {
-            fs.mkdirSync(pageDirPath);
+            Utils.mkdirByPathSync(pageDirPath);
         }
 
         // Create dir for specific page
-        fs.mkdirSync(dirPath);
+        Utils.mkdirByPathSync(dirPath);
 
         // Create index.html file in the created dir
         fs.writeFile(filePath, content, {'flags': 'w'});
@@ -153,12 +158,12 @@ class TemplateHelper {
             tagsPath = path.join(this.outputDir, this.siteConfig.advanced.urls.tagsPrefix);
 
             if(!Utils.dirExists(tagsPath)) {
-                fs.mkdirSync(tagsPath);
+                Utils.mkdirByPathSync(tagsPath);
             }
         }
 
         content = this.compressHTML(content);
-        fs.mkdirSync(dirPath);
+        Utils.mkdirByPathSync(dirPath);
         fs.writeFile(filePath, content, {'flags': 'w'});
     }
 
@@ -175,7 +180,7 @@ class TemplateHelper {
             tagsPath = path.join(this.outputDir, this.siteConfig.advanced.urls.tagsPrefix);
 
             if(!Utils.dirExists(tagsPath)) {
-                fs.mkdirSync(tagsPath);
+                Utils.mkdirByPathSync(tagsPath);
             }
         }
 
@@ -183,12 +188,12 @@ class TemplateHelper {
 
         // Create page directory if not exists
         if(!Utils.dirExists(pageDirPath)) {
-            fs.mkdirSync(pageDirPath);
+            Utils.mkdirByPathSync(pageDirPath);
         }
 
         // Create dir for specific page
         if(!Utils.dirExists(dirPath)) {
-            fs.mkdirSync(dirPath);
+            Utils.mkdirByPathSync(dirPath);
         }
 
         // Create index.html file in the created dir
@@ -203,7 +208,7 @@ class TemplateHelper {
         let filePath = path.join(this.outputDir, this.siteConfig.advanced.urls.authorsPrefix, authorSlug, 'index.html');
         let dirPath = path.join(this.outputDir, this.siteConfig.advanced.urls.authorsPrefix, authorSlug);
         content = this.compressHTML(content);
-        fs.mkdirSync(dirPath);
+        Utils.mkdirByPathSync(dirPath);
         fs.writeFile(filePath, content, {'flags': 'w'});
     }
 
@@ -221,11 +226,11 @@ class TemplateHelper {
         } catch(e) {}
 
         if(!pageDirStat) {
-            fs.mkdirSync(pageDirPath);
+            Utils.mkdirByPathSync(pageDirPath);
         }
 
         // Create dir for specific page
-        fs.mkdirSync(dirPath);
+        Utils.mkdirByPathSync(dirPath);
 
         // Create index.html file in the created dir
         fs.writeFile(filePath, content, {'flags': 'w'});

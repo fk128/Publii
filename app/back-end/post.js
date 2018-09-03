@@ -13,6 +13,7 @@ const Authors = require('./authors.js');
 const Themes = require('./themes.js');
 const Utils = require('./helpers/utils.js');
 const normalizePath = require('normalize-path');
+const slugify = require('transliteration').slugify;
 
 class Post extends Model {
     constructor(appInstance, postData, storeMode = true) {
@@ -25,7 +26,7 @@ class Post extends Model {
 
         if(postData.title) {
             this.title = postData.title;
-            this.slug = slug(postData.slug);
+            this.slug = slugify(postData.slug, { ignore: ['/'] });
             this.author = Number(postData.author).toString();
             this.status = postData.status;
             this.tags = postData.tags;

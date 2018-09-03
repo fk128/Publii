@@ -1432,18 +1432,18 @@ export default {
             }, 1000);
         },
         validate () {
-            if(this.advanced.urls.tagsPrefix.trim() === '' && !!this.advanced.urls.cleanUrls) {
-                this.$bus.$emit('message-display', {
-                    message: 'Tags prefix cannot be empty if pretty URLs are enabled.',
-                    type: 'warning',
-                    lifeTime: 3
-                });
+            // if(this.advanced.urls.tagsPrefix.trim() === 'a' && !!this.advanced.urls.cleanUrls) {
+            //     this.$bus.$emit('message-display', {
+            //         message: 'Tags prefix cannot be empty if pretty URLs are enabled.',
+            //         type: 'warning',
+            //         lifeTime: 3
+            //     });
 
-                this.errors.push('tags-prefix');
-                this.$refs['advanced-tabs'].toggle('URLs');
+            //     this.errors.push('tags-prefix');
+            //     this.$refs['advanced-tabs'].toggle('URLs');
 
-                return false;
-            }
+            //     return false;
+            // }
 
             if(this.advanced.urls.authorsPrefix.trim() === '') {
                 this.$bus.$emit('message-display', {
