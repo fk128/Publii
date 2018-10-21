@@ -68,11 +68,11 @@ class Image extends Model {
             dirPath = path.join(this.siteDir, 'input', 'media', 'website');
             responsiveDirPath = path.join(this.siteDir, 'input', 'media', 'website', 'responsive');
         } else {
-            dirPath = path.join(this.siteDir, 'input', 'media', 'posts', (this.id).toString());
-            responsiveDirPath = path.join(this.siteDir, 'input', 'media', 'posts', (this.id).toString(), 'responsive');
+            dirPath = path.join(this.siteDir, 'input', 'media', 'posts');
+            responsiveDirPath = path.join(this.siteDir, 'input', 'media', 'posts', 'responsive');
 
             if(this.imageType === 'galleryImages') {
-                galleryDirPath = path.join(this.siteDir, 'input', 'media', 'posts', (this.id).toString(), 'gallery');
+                galleryDirPath = path.join(this.siteDir, 'input', 'media', 'posts', 'gallery');
             }
         }
 
@@ -93,7 +93,7 @@ class Image extends Model {
         }
 
         let finalFileName = path.parse(fileName);
-        finalFileName = slug(finalFileName.name, false, true) + finalFileName.ext;
+        finalFileName = slug(finalFileName.name, false, true)  + finalFileName.ext;
         newPath = path.join(dirPath, finalFileName);
 
         if(this.imageType === 'galleryImages') {
@@ -118,7 +118,8 @@ class Image extends Model {
                     process.send({
                         type: "image-copied"
                     });
-                });
+                }
+            );
             });
         } catch (err) {
             return {
@@ -330,6 +331,12 @@ class Image extends Model {
 
             promises.push(result);
         }
+
+        // restrict size of original image
+        Jimp.read(originalPath).then(image => {
+            image.scaleToFit(1024, 1024)
+            .quality(90).write(originalPath);
+        });
 
         return promises;
     }
