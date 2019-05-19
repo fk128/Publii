@@ -264,8 +264,8 @@ export default {
             let mediaPath = this.$store.state.currentSite.siteDir;
             mediaPath = 'file://' + mediaPath.replace(/\\/g, '/');
             mediaPath += '/input/media/posts/';
-            mediaPath += this.postID === 0 ? 'temp' : this.postID;
-            mediaPath += '/';
+           // mediaPath += this.postID === 0 ? 'temp' : this.postID;
+           // mediaPath += '/';
 
             return mediaPath;
         },

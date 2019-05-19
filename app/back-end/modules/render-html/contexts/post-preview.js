@@ -450,7 +450,7 @@ class RendererContextPostPreview extends RendererContext {
             postDirectory = 'temp';
         }
 
-        let domainMediaPath = domain + '/media/posts/' + postDirectory + '/';
+        let domainMediaPath = domain + '/media/posts/';// + postDirectory + '/';
 
         // Replace domain name constat with real URL to media directory
         let preparedText = originalText.split('#DOMAIN_NAME#').join(domainMediaPath);

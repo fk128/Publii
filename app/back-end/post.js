@@ -237,7 +237,7 @@ class Post extends Model {
             }
 
             if (tempDirectoryExists) {
-                let finalImagesDir = path.join(this.siteDir, 'input', 'media', 'posts', (this.id).toString());
+                let finalImagesDir = path.join(this.siteDir, 'input', 'media', 'posts');
                 fs.copySync(tempImagesDir, finalImagesDir);
                 fs.removeSync(tempImagesDir);
                 // Update text

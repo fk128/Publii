@@ -33,7 +33,7 @@ class ContentHelper {
         }
 
         // Get media URL
-        let domainMediaPath = domain + '/media/posts/' + postID + '/';
+        let domainMediaPath = domain + '/media/posts/';// + postID + '/';
 
         // Replace domain name constant with real URL to media directory
         let preparedText = originalText.split('#DOMAIN_NAME#').join(domainMediaPath);
