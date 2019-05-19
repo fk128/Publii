@@ -104,7 +104,7 @@ class ImageHelper {
      * Retrieve media path
      */
     getMediaPath() {
-        let mediaPath = path.join(this.siteDir, 'input', 'media', 'posts', (this.postID).toString());
+        let mediaPath = path.join(this.siteDir, 'input', 'media');
         mediaPath = normalizePath(mediaPath);
 
         return mediaPath;
@@ -114,9 +114,9 @@ class ImageHelper {
      * Delete images connected with a specific post ID
      */
     static deleteImagesDirectory(siteDir, postID) {
-        let dirPath = path.join(siteDir, 'input', 'media', 'posts', (postID).toString());
-        let responsiveDirPath = path.join(siteDir, 'input', 'media', 'posts', (postID).toString(), 'responsive');
-        let galleryDirPath = path.join(siteDir, 'input', 'media', 'posts', (postID).toString(), 'gallery');
+        let dirPath = path.join(siteDir, 'input', 'media');
+        let responsiveDirPath = path.join(siteDir, 'input', 'media', 'responsive');
+        let galleryDirPath = path.join(siteDir, 'input', 'media', 'gallery');
 
         for(let directoryPath of [galleryDirPath, responsiveDirPath, dirPath]) {
             if (Utils.dirExists(directoryPath)) {
@@ -137,8 +137,8 @@ class ImageHelper {
      * Copy images connected with a specific post ID to other post ID
      */
     static copyImagesDirectory(siteDir, postID, newPostID) {
-        let dirPath = path.join(siteDir, 'input', 'media', 'posts', (postID).toString());
-        let newDirPath = path.join(siteDir, 'input', 'media', 'posts', (newPostID).toString());
+        let dirPath = path.join(siteDir, 'input', 'media');
+        let newDirPath = path.join(siteDir, 'input', 'media');
 
         // Copy files from the old directory to the new directory
         if(Utils.dirExists(dirPath)) {

@@ -12,6 +12,9 @@ const Utils = require('./helpers/utils.js');
 const slug = require('./helpers/slug');
 const sharp = require('sharp');
 const Jimp = require('jimp');
+const exiftool = require('node-exiftool')
+const ep = new exiftool.ExiftoolProcess()
+const crypto = require('crypto');
 
 class Image extends Model {
     constructor(appInstance, imageData) {
@@ -93,12 +96,14 @@ class Image extends Model {
         }
 
         let finalFileName = path.parse(fileName);
-        finalFileName = slug(finalFileName.name, false, true)  + finalFileName.ext;
+        finalFileName = slug(crypto.createHash('md5').update(finalFileName.name).digest('hex'), false, true)  + finalFileName.ext;
         newPath = path.join(dirPath, finalFileName);
 
         if(this.imageType === 'galleryImages') {
             newPath = path.join(galleryDirPath, finalFileName);
         }
+
+        let newDimensions = false;
 
         // Store main image
         try {
@@ -109,6 +114,19 @@ class Image extends Model {
                     if (err) throw err;
 
                     let pathData = path.parse(newPath);
+
+                    sharp(newPath)
+                    .withoutEnlargement()
+                    .resize(2048,2048)
+                    .max()
+                    .quality(90)
+                    .toBuffer()
+                    .then(function (outputBuffer) {
+                        let wstream = fs.createWriteStream(newPath);
+                        wstream.write(outputBuffer);
+                        wstream.end();
+                        resolve(newPath);
+                    });
 
                     // Save responsive images
                     if(generateResponsiveImages && self.allowedImageExtension(pathData.ext)) {
@@ -134,7 +152,14 @@ class Image extends Model {
             dimensions = this.getSvgImageDimensions(this.path);
         } else {
             try {
-                dimensions = sizeOf(this.path);
+               dimensions = sizeOf(newPath);
+               fs.writeFile("/tmp/test3.txt", dimensions.width, function(err) {
+                if(err) {
+                    return console.log(err);
+                }
+            
+                console.log("The file was saved!");
+            }); 
             } catch(e) {
                 console.log('back-end/image.js - wrong image path - missing dimensions');
                 dimensions = [false, false];
@@ -142,7 +167,7 @@ class Image extends Model {
         }
 
         let filename = path.parse(newPath).base;
-
+        
         // Return the image dimensions and new location
         return {
             size: [dimensions.width, dimensions.height],
@@ -332,11 +357,36 @@ class Image extends Model {
             promises.push(result);
         }
 
+        fs.writeFile("/tmp/test.txt", themeConfig.files.originalImages, function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        
+            console.log("The file was saved!");
+        }); 
         // restrict size of original image
-        Jimp.read(originalPath).then(image => {
-            image.scaleToFit(1024, 1024)
-            .quality(90).write(originalPath);
-        });
+                // // if (themeConfig.files.originalImages.reduce) {
+                //     height = themeConfig.files.originalImages.height;
+                //     width = themeConfig.files.originalImages.width;
+                //     quality = themeConfig.files.originalImages.quality;
+                //     Jimp.read(originalPath).then(image => {
+                //         image.scaleToFit(width, height)
+                //         .quality(quality).write(originalPath);
+                //     });
+                // // }
+
+
+
+        // add copyright meta
+        ep
+        .open()
+        .then(() => ep.writeMetadata(originalPath, {
+          all: '', // remove existing tags
+          copyright: siteConfig.displayName
+        }, ['overwrite_original']))
+        .then(console.log, console.error)
+        .then(() => ep.close())
+        .catch(console.error)
 
         return promises;
     }

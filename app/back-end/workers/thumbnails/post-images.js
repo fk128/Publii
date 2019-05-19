@@ -64,11 +64,18 @@ process.on('message', function(msg){
         Promise.all(promises).then(res => {
             setTimeout(() => {
                 let thumbnailDimensions = false;
+                let imageDimensions = false;
 
                 try {
                     thumbnailDimensions = sizeOf(res[0]);
                 } catch(e) {
                     thumbnailDimensions = false;
+                }
+
+                try {
+                    imageDimensions = sizeOf(res[1]);
+                } catch(e) {
+                    imageDimensions = false;
                 }
 
                 // When process is ready - finish it by sending a proper event
@@ -77,7 +84,8 @@ process.on('message', function(msg){
                     result: {
                         baseImage: result,
                         thumbnailPath: res.map(url => 'file://' + normalizePath(url)),
-                        thumbnailDimensions: thumbnailDimensions
+                        thumbnailDimensions: thumbnailDimensions,
+                        imageDimensions: imageDimensions
                     }
                 });
             }, 250);

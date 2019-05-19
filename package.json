@@ -51,9 +51,12 @@
     "webpack-dashboard": "^1.0.2"
   },
   "dependencies": {
+    "cryptr": "^4.0.2",
     "electron": "^2.0.8",
     "handlebars": "^4.0.5",
-    "opencollective": "^1.0.3"
+    "node-exiftool": "^2.3.0",
+    "opencollective": "^1.0.3",
+    "piexifjs": "^1.0.4"
   },
   "build": {
     "app-bundle-id": "tidycustoms",

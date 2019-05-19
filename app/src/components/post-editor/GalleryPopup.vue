@@ -182,6 +182,7 @@ export default {
                     this.imagesToUpload = data.paths.length;
                     this.uploadProgress = 0;
                     this.uploadMessage = '';
+                    this.images.reverse();
                     this.loadImages(data.paths);
                 }
             });
@@ -199,13 +200,14 @@ export default {
             ipcRenderer.once('app-image-uploaded', (event, data) => {
                 this.uploadProgress = this.uploadProgress + 1;
                 this.uploadMessage = `Uploading ${this.uploadProgress} of ${this.imagesToUpload} pictures`;
-
+                
                 this.images.push({
                     fullImagePath: data.baseImage.url,
                     thumbnailPath: data.thumbnailPath[0],
                     thumbnailHeight: data.thumbnailDimensions ? data.thumbnailDimensions.height : '',
                     thumbnailWidth: data.thumbnailDimensions ? data.thumbnailDimensions.width : '',
-                    dimensions: data.baseImage.size.join('x'),
+                    // dimensions: data.baseImage.size.join('x'),
+                    dimensions: 4*data.thumbnailDimensions.width + 'x' + 4*data.thumbnailDimensions.height ,
                     alt: '',
                     caption: ''
                 });
@@ -213,6 +215,7 @@ export default {
                 if(imagesPaths.length) {
                     this.loadImages(imagesPaths);
                 } else {
+                    this.images.reverse();
                     this.isUploading = false;
                 }
             });
